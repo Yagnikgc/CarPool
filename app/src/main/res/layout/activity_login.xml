@@ -1,9 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     tools:context=".activity_login">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="40dp"
+        android:paddingBottom="40dp"
+        android:gravity="center"
+        android:background="@drawable/border"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="25dp"
+            android:textColor="@color/colorPrimary"
+            android:text="@string/lbl_login"
+            android:textSize="28sp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:text="@string/lbl_email"/>
+            <EditText
+                android:id="@+id/txt_username_logIn"
+                style="@style/style_TextBox"
+                android:backgroundTint="@color/colorPrimary"
+                android:hint="@string/lbl_email_example"
+                android:inputType="textEmailAddress" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:text="@string/lbl_password"/>
+            <EditText
+                android:id="@+id/txt_password_logIn"
+                style="@style/style_TextBox"
+                android:backgroundTint="@color/colorPrimary"
+                android:hint="@string/lbl_password_exapmle"
+                android:inputType="textPassword" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:textColor="@color/colorLinkButton"
+                android:text="Forgot password"/>
+        </LinearLayout>
+        <Button
+            android:layout_width="135dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="35dp"
+            android:text="@string/lbl_login" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorLinkButton"
+            android:text="Don't have an account? Sign Up"/>
+    </LinearLayout>
+</ScrollView>
