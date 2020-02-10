@@ -59,15 +59,19 @@
                 android:backgroundTint="@color/colorPrimary"
                 android:hint="@string/lbl_password_exapmle"
                 android:inputType="textPassword" />
+
             <TextView
+                android:id="@+id/txt_forget_password_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:textStyle="bold"
+                android:text="Forgot password"
                 android:textColor="@color/colorLinkButton"
-                android:text="Forgot password"/>
+                android:textStyle="bold" />
         </LinearLayout>
+
         <Button
+            android:id="@+id/btn_login"
             android:layout_width="135dp"
             android:layout_height="wrap_content"
             android:layout_margin="35dp"
