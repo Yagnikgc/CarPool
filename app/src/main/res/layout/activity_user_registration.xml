@@ -33,6 +33,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/txt_firstName_reg"
                 android:inputType="textPersonName" />
         </LinearLayout>
         <LinearLayout
@@ -49,6 +50,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/txt_lastName_reg"
                 android:inputType="textPersonName" />
         </LinearLayout>
         <LinearLayout
@@ -66,6 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/lbl_email_example"
+                android:id="@+id/txt_email_reg"
                 android:inputType="textEmailAddress" />
         </LinearLayout>
         <LinearLayout
@@ -82,6 +85,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/txt_contact_reg"
                 android:inputType="phone" />
         </LinearLayout>
     <LinearLayout
@@ -98,17 +102,20 @@
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/rg_haveCar_reg"
             android:orientation="horizontal">
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
+                android:id="@+id/rdb_haveCar_yes_reg"
                 android:text="Yes"/>
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:checked="true"
+                android:id="@+id/rdb_haveCar_no_reg"
                 android:text="No"/>
         </RadioGroup>
     </LinearLayout>
@@ -127,6 +134,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/lbl_password_exapmle"
+                android:id="@+id/txt_password_reg"
                 android:inputType="textPassword" />
         </LinearLayout>
         <LinearLayout
@@ -144,12 +152,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/lbl_password_exapmle"
+                android:id="@+id/txt_confPassword_reg"
                 android:inputType="textPassword" />
         </LinearLayout>
         <Button
             android:layout_width="135dp"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
+            android:id="@+id/btn_signUp_reg"
             android:text="@string/lbl_register" />
         <TextView
             android:layout_width="wrap_content"
@@ -157,6 +167,7 @@
             android:textColor="@color/colorLinkButton"
             android:textStyle="bold"
             android:paddingBottom="15dp"
+            android:id="@+id/lbl_backToLogIn_reg"
             android:text="Already Registered? Sign In"/>
     </LinearLayout>
 </ScrollView>
