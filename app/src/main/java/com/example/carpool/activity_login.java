@@ -9,17 +9,13 @@ import android.widget.TextView;
 
 public class activity_login extends AppCompatActivity {
     TextView lbl_registerNow;
-    Database db_handler;
+    DatabaseHandler db_handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         InitializeControls();
-    }
-
-    private void InitializeControls() {
-        db_handler = new Database(getApplicationContext());
-        lbl_registerNow = findViewById(R.id.lbl_registerNow);
+        // Create on click event to switch from LogIn to Registration
         lbl_registerNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -27,5 +23,10 @@ public class activity_login extends AppCompatActivity {
                 startActivity(intent_register);
             }
         });
+    }
+
+    private void InitializeControls() {
+        db_handler = new DatabaseHandler(getApplicationContext());
+        lbl_registerNow = findViewById(R.id.lbl_registerNow);
     }
 }
