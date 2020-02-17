@@ -38,7 +38,7 @@ public class activity_login extends AppCompatActivity {
                 getUser=db_handler.getAllUsers();
                 for (User user : getUser)
                 {
-                    if(user.getEmail().equals(edt_username.getText().toString()))
+                    if(user.getEmail().equalsIgnoreCase(edt_username.getText().toString()))
                     {
                         isRegistered = true;
                         break;
@@ -62,18 +62,17 @@ public class activity_login extends AppCompatActivity {
                 getUser=db_handler.getAllUsers();
                 for (User user : getUser)
                 {
-
-
-                   //Toast.makeText(getApplicationContext(),user.getEmail(),Toast.LENGTH_LONG).show();
-                    if(user.getEmail().equals(edt_username.getText().toString()) && user.getPassword().equals(md5(edt_password.getText().toString())))
+                    if(user.getEmail().equalsIgnoreCase(edt_username.getText().toString()) && user.getPassword().equals(md5(edt_password.getText().toString())))
                     {
                         loginFound =true;
                         break;
                     }
                 }
-             if(loginFound)
+                if(loginFound)
                 {
                     Toast.makeText(getApplicationContext(),"Login Successfully",Toast.LENGTH_LONG).show();
+                    Intent intent_userHome = new Intent(getApplicationContext(), userHome.class);
+                    startActivity(intent_userHome);
                 }
                 else
                 {
