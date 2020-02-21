@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,19 +32,6 @@ public class activity_login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         InitializeControls();
-        //Check if user is already logged in or not
-        int userID = sharedPreferences.getInt("userID",0);
-        String userName = sharedPreferences.getString("userName",null);
-        String userType = sharedPreferences.getString("userType", null);
-        if((userName != null) && (userID != 0)){
-            if(userType.equals("Customer")) {
-                Intent intent_userHome = new Intent(getApplicationContext(), userHome.class);
-                startActivity(intent_userHome);
-            }
-            else if(userType.equals("Driver")){
-
-            }
-        }
         //for forget Password
         forgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +68,7 @@ public class activity_login extends AppCompatActivity {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putInt("userID", user.getId());
                         editor.putString("userName", new StringBuilder().append(user.getFname()).append(" ").append(user.getLname()).toString());
-                        editor.putString("userType", user.getUserType());
+                        editor.putString("userType", user.getUserStatus());
                         editor.commit();
                         loginFound =true;
                         break;
@@ -89,8 +77,18 @@ public class activity_login extends AppCompatActivity {
                 if(loginFound)
                 {
                     Toast.makeText(getApplicationContext(),"Login Successfully",Toast.LENGTH_LONG).show();
-                    Intent intent_userHome = new Intent(getApplicationContext(), userHome.class);
-                    startActivity(intent_userHome);
+                    String userType = sharedPreferences.getString("userType", null);
+                    if(userType.equalsIgnoreCase("Customer")) {
+                        Intent intent_userHome = new Intent(getApplicationContext(), userHome.class);
+                        startActivity(intent_userHome);
+                    }
+                    else if(userType.equalsIgnoreCase("Driver")){
+                        Intent intent_registerVehicle = new Intent(getApplicationContext(), registerVehicelDriver.class);
+                        startActivity(intent_registerVehicle);
+                    }
+                    else{
+                        Log.i("LoginActivity",userType + "\nError while fetching user type");
+                    }
                 }
                 else
                 {

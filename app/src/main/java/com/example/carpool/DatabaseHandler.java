@@ -34,7 +34,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public long insertUser(String fname, String lname, String contact, String email, String password, String userType, String userStatus) {
         // get writable database to write data
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
         // id will be inserted automatically.
         // add all fields we want to insert in table

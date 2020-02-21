@@ -56,7 +56,8 @@ public class userRegistration extends AppCompatActivity {
             userType = "";
         ValidateDataValues();
         if(errorCounter==0) {
-            databaseHandler.insertUser(txt_firstName.getText().toString(), txt_lastName.getText().toString(), txt_contact.getText().toString(), txt_email.getText().toString(), md5(txt_password.getText().toString()), userType, userStatus);
+            databaseHandler.insertUser(txt_firstName.getText().toString(), txt_lastName.getText().toString(),
+                    txt_contact.getText().toString(), txt_email.getText().toString(), md5(txt_password.getText().toString()), userType, userStatus);
             Toast.makeText(getApplicationContext(),"Thank you for registration, "+txt_firstName.getText().toString(),Toast.LENGTH_LONG).show();
             Intent intent_logIn = new Intent(getApplicationContext(), activity_login.class);
             startActivity(intent_logIn);

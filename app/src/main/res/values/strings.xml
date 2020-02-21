@@ -16,4 +16,69 @@
         <item>3</item>
         <item>4</item>
     </string-array>
+    <string-array name="array_vehicleTypes">
+        <item>Sedan</item>
+        <item>SUV</item>
+        <item>Hatchback</item>
+    </string-array>
+    <string-array name="array_manufactureYear">
+        <item>2012</item>
+        <item>2013</item>
+        <item>2014</item>
+        <item>2015</item>
+        <item>2016</item>
+        <item>2017</item>
+        <item>2018</item>
+        <item>2019</item>
+        <item>2020</item>
+    </string-array>
+    <string-array name="array_companyName">
+        <item>Acura</item>
+        <item>Alfa Romeo</item>
+        <item>Audi</item>
+        <item>BMW</item>
+        <item>Bentley</item>
+        <item>Buick</item>
+        <item>Cadillac</item>
+        <item>Chevrolet</item>
+        <item>Chrysler</item>
+        <item>Dodge</item>
+        <item>Fiat</item>
+        <item>Ford</item>
+        <item>GMC</item>
+        <item>Genesis</item>
+        <item>Honda</item>
+        <item>Hyundai</item>
+        <item>Infiniti</item>
+        <item>Jaguar</item>
+        <item>Jeep</item>
+        <item>Kia</item>
+        <item>Land Rover</item>
+        <item>Lexus</item>
+        <item>Lincoln</item>
+        <item>Lotus</item>
+        <item>Maserati</item>
+        <item>Mazda</item>
+        <item>Mercedes-Benz</item>
+        <item>Mercury</item>
+        <item>Mini</item>
+        <item>Mitsubishi</item>
+        <item>Nissan</item>
+        <item>Polestar</item>
+        <item>Pontiac</item>
+        <item>Porsche</item>
+        <item>Ram</item>
+        <item>Rivian</item>
+        <item>Rolls-Royce</item>
+        <item>Saab</item>
+        <item>Saturn</item>
+        <item>Scion</item>
+        <item>Smart</item>
+        <item>Subaru</item>
+        <item>Suzuki</item>
+        <item>Tesla</item>
+        <item>Toyota</item>
+        <item>Volkswagen</item>
+        <item>Volvo</item>
+    </string-array>
 </resources>
