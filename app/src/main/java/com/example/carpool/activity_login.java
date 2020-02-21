@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,7 +14,6 @@ import android.widget.Toast;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class activity_login extends AppCompatActivity {
@@ -21,16 +21,29 @@ public class activity_login extends AppCompatActivity {
     DatabaseHandler db_handler;
     EditText edt_username,edt_password;
     Button login;
-    //Context context;
     List<User> getUser;
     Boolean isRegistered= false;
     Boolean loginFound=false;
+    // Object to store currently logged in user
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         InitializeControls();
+        //Check if user is already logged in or not
+        int userID = sharedPreferences.getInt("userID",0);
+        String userName = sharedPreferences.getString("userName",null);
+        String userType = sharedPreferences.getString("userType", null);
+        if((userName != null) && (userID != 0)){
+            if(userType.equals("Customer")) {
+                Intent intent_userHome = new Intent(getApplicationContext(), userHome.class);
+                startActivity(intent_userHome);
+            }
+            else if(userType.equals("Driver")){
 
+            }
+        }
         //for forget Password
         forgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +63,7 @@ public class activity_login extends AppCompatActivity {
                 }
                 else
                 {
-                    Toast.makeText(getApplicationContext(),"match not found",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"User not found",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -64,6 +77,11 @@ public class activity_login extends AppCompatActivity {
                 {
                     if(user.getEmail().equalsIgnoreCase(edt_username.getText().toString()) && user.getPassword().equals(md5(edt_password.getText().toString())))
                     {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt("userID", user.getId());
+                        editor.putString("userName", new StringBuilder().append(user.getFname()).append(" ").append(user.getLname()).toString());
+                        editor.putString("userType", user.getUserType());
+                        editor.commit();
                         loginFound =true;
                         break;
                     }
@@ -118,6 +136,6 @@ public class activity_login extends AppCompatActivity {
         edt_password=findViewById(R.id.txt_password_logIn);
         forgetPassword=findViewById(R.id.txt_forget_password_login);
         login=findViewById(R.id.btn_login);
-
+        sharedPreferences = getSharedPreferences("CarPool", Context.MODE_PRIVATE);
     }
 }

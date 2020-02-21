@@ -6,4 +6,14 @@
     <string name="lbl_password_exapmle">••••••••</string>
     <string name="lbl_login">Log In</string>
     <string name="lbl_register">Sign Up</string>
+    <string name="API_KEY">AIzaSyBFbSHO8Kp8rKHTeS6zoczJNuymvn0cjQk</string>
+    <string name="lbl_from">From: </string>
+    <string name="lbl_to">To: </string>
+    <string name="lbl_find_ride">Find Ride</string>
+    <string-array name="array_noOfSeasts">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
 </resources>

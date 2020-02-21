@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="20dp"
-            android:text="@string/lbl_register"
+            android:text="@string/lbl_find_ride"
             android:textSize="28sp" />
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,19 +28,92 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:text="From:"/>
-            <EditText
+                android:text="@string/lbl_from"/>
+            <fragment
+                android:id="@+id/autocomplete_fragment_from_userHome"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="@string/lbl_to"/>
+            <fragment
+                android:id="@+id/autocomplete_fragment_to_userHome"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="No of Seats: "/>
+            <Spinner
+                android:id="@+id/spn_noOfSeats_userHome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/txt_firstName_reg"
-                android:inputType="textPersonName" />
+                android:entries="@array/array_noOfSeasts"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="Date: "/>
+            <EditText
+                android:id="@+id/date_userHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="DD/MMM/YYYY"
+                android:inputType="date"
+                android:focusable="false"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="Time: "/>
+            <EditText
+                android:id="@+id/time_userHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="00:00 A"
+                android:inputType="time"
+                android:focusable="false"/>
         </LinearLayout>
         <Button
             android:layout_width="135dp"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:id="@+id/btn_search_ride_cus"
+            android:id="@+id/btn_searchRide_userHome"
             android:layout_marginBottom="15dp"
-            android:text="Find Ride" />
+            android:text="@string/lbl_find_ride" />
     </LinearLayout>
 </ScrollView>

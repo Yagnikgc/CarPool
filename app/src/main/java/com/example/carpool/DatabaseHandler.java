@@ -5,9 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import androidx.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +20,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CustomerRequest.CREATE_RIDE_REQUEST_TABLE);
         db.execSQL(User.CREATE_USER_TABLE);
     }
 
@@ -163,5 +161,34 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return db.update(User.TABLE_USER, values, User.KEY_ID + " = ?",
                 new String[]{String.valueOf(user.getId())});
     }
+    /* ------ END ALL OPERATION FOR USER TABLE ----- */
+
     /* ------ START ALL OPERATION FOR USER TABLE ----- */
+    // Method to perform insert operation
+    // OnClick of insert button, it will store all data into database
+    public long insertCustomerRequest(int customerID, Double sourceLat, Double sourceLong, Double destinationLat, Double destinationLong,
+                                      String rideDate, String rideTime, String rideRequestDate, String rideRequestTime, int noOfSeats) {
+        // get writable database to write data
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        // id will be inserted automatically.
+        // add all fields we want to insert in table
+        values.put(CustomerRequest.KEY_CustomerID, customerID);
+        values.put(CustomerRequest.KEY_SOURCE_LAT, sourceLat);
+        values.put(CustomerRequest.KEY_SOURCE_LONG, sourceLong);
+        values.put(CustomerRequest.KEY_DEST_LAT, destinationLat);
+        values.put(CustomerRequest.KEY_DEST_LONG, destinationLong);
+        values.put(CustomerRequest.KEY_RIDE_DATE, rideDate);
+        values.put(CustomerRequest.KEY_RIDE_TIME, rideTime);
+        values.put(CustomerRequest.KEY_REQUEST_DATE, rideRequestDate);
+        values.put(CustomerRequest.KEY_REQUEST_TIME, rideRequestTime);
+        values.put(CustomerRequest.KEY_NO_OF_SEATS, noOfSeats);
+        // insert row
+        long id = db.insert(CustomerRequest.TABLE_CUSTOMER_REQUEST, null, values);
+        // close db connection
+        db.close();
+        // return newly inserted row id
+        return id;
+    }
+    /* ------ END ALL OPERATION FOR USER TABLE ----- */
 }
