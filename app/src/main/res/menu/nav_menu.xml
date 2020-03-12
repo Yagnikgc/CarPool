@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="nav_View">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_findRide"
+            android:enabled="true"
+            android:title="@string/find_ride"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/action_yourTrips"
+            android:enabled="true"
+            android:title="@string/yourTrips"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/action_rateUs"
+            android:enabled="true"
+            android:title="@string/rateUs"
+            app:showAsAction="ifRoom" />
+    </group>
+    <group android:id="@+id/signOut">
+        <item
+            android:id="@+id/action_signOut"
+            android:enabled="true"
+            android:title="@string/signOut"
+            app:showAsAction="ifRoom" />
+    </group>
+</menu>

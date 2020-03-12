@@ -5,13 +5,12 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:padding="20dp"
-    tools:context=".userRegistration">
+    tools:context=".RegistrationActivity">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:background="@drawable/border"
         android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
@@ -88,37 +87,37 @@
                 android:id="@+id/txt_contact_reg"
                 android:inputType="phone" />
         </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="7dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="Do you have car?:"/>
-        <RadioGroup
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/rg_haveCar_reg"
+            android:layout_margin="7dp"
             android:orientation="horizontal">
-            <RadioButton
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:id="@+id/rdb_haveCar_yes_reg"
-                android:text="Yes"/>
-            <RadioButton
-                android:layout_width="wrap_content"
+                android:textStyle="bold"
+                android:text="Do you have car?:"/>
+            <RadioGroup
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:checked="true"
-                android:id="@+id/rdb_haveCar_no_reg"
-                android:text="No"/>
-        </RadioGroup>
-    </LinearLayout>
+                android:id="@+id/rg_haveCar_reg"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:id="@+id/rdb_haveCar_yes_reg"
+                    android:text="Yes"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:checked="true"
+                    android:id="@+id/rdb_haveCar_no_reg"
+                    android:text="No"/>
+            </RadioGroup>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -161,6 +160,11 @@
             android:layout_margin="20dp"
             android:id="@+id/btn_signUp_reg"
             android:text="@string/lbl_register" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

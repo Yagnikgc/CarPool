@@ -1,61 +1,86 @@
 package com.example.carpool;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class userHome extends AppCompatActivity {
-
-    private static final String TAG = "MainActivity";
-    AutocompleteSupportFragment autocompleteFragment_from_userHome, autocompleteFragment_to_userHome;
-    String apiKey;
-    EditText selectDate,selectTime;
-    Spinner spn_noOfSeats;
-    Button btn_findRide;
-    LatLng sourceLatLng, destLatLng;
+public class SearchRide extends Fragment {
+    private static final String TAG = "SearchRide";
+    private AutocompleteSupportFragment autocompleteFragment_from_userHome, autocompleteFragment_to_userHome;
+    private String apiKey, userType;
+    private EditText selectDate,selectTime;
+    private Spinner spn_noOfSeats;
+    private Button btn_findRide;
+    private LatLng sourceLatLng, destLatLng;
     private int mYear, mMonth, mDay, mHour, mMinute;
-    final Calendar myCalendar = Calendar.getInstance();
+    private final Calendar myCalendar = Calendar.getInstance();
     // Object to store currently logged in user
-    SharedPreferences sharedPreferences;
-    DatabaseHandler databaseHandler;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_home);
+    private SharedPreferences sharedPreferences;
+    private DatabaseReference reference;
+    private long maxId = 0;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.search_ride, container, false);
+    }
+
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        InitializeUI();
         InitializeControls();
     }
 
+    private void InitializeUI() {
+        sharedPreferences = getActivity().getSharedPreferences("CarPool", Context.MODE_PRIVATE);
+        userType = sharedPreferences.getString("UserType",null);
+        apiKey = getString(R.string.API_KEY);
+        // Initialize Fragments
+        autocompleteFragment_from_userHome = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment_from_userHome);
+        autocompleteFragment_to_userHome = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment_to_userHome);
+        selectDate = getView().findViewById(R.id.date_userHome);
+        selectTime = getView().findViewById(R.id.time_userHome);
+        spn_noOfSeats = getView().findViewById(R.id.spn_noOfSeats_userHome);
+        btn_findRide = getView().findViewById(R.id.btn_searchRide_userHome);
+    }
+
     private void InitializeControls() {
-        databaseHandler = new DatabaseHandler(getApplicationContext());
-        sharedPreferences = getSharedPreferences("CarPool",Context.MODE_PRIVATE);
-        Toast.makeText(getApplicationContext(), sharedPreferences.getString("userName",null),Toast.LENGTH_LONG).show();
-        final DatePickerDialog date = new DatePickerDialog(userHome.this,new DatePickerDialog.OnDateSetListener() {
+        final DatePickerDialog date = new DatePickerDialog(getContext(),new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
-                // TODO Auto-generated method stub
                 mYear = year;
                 mMonth = monthOfYear;
                 mDay = dayOfMonth;
@@ -67,7 +92,7 @@ public class userHome extends AppCompatActivity {
                 selectDate.setText(sdf.format(myCalendar.getTime()));
             }
         },mYear,mMonth,mDay);
-        final TimePickerDialog time = new TimePickerDialog(userHome.this, new TimePickerDialog.OnTimeSetListener() {
+        final TimePickerDialog time = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 mHour = hourOfDay;
@@ -79,19 +104,13 @@ public class userHome extends AppCompatActivity {
                 selectTime.setText(sdf.format(myCalendar.getTime()));
             }
         },mHour,mMinute, false);
-        apiKey = getString(R.string.API_KEY);
         /**
          * Initialize Places. For simplicity, the API key is hard-coded. In a production
          * environment we recommend using a secure mechanism to manage API keys.
          */
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), apiKey);
+            Places.initialize(getContext(), apiKey);
         }
-        // Initialize Fragments
-        autocompleteFragment_from_userHome = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment_from_userHome);
-        autocompleteFragment_to_userHome = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment_to_userHome);
         // Specify the types of place data to return.
         autocompleteFragment_from_userHome.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
         autocompleteFragment_to_userHome.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
@@ -100,12 +119,10 @@ public class userHome extends AppCompatActivity {
             @Override
             public void onPlaceSelected(Place place) {
                 sourceLatLng = place.getLatLng();
-                // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getLatLng());
             }
             @Override
             public void onError(Status status) {
-                // TODO: Handle the error.
                 Log.i(TAG, "An error occurred: " + status);
             }
         });
@@ -113,23 +130,16 @@ public class userHome extends AppCompatActivity {
             @Override
             public void onPlaceSelected(Place place) {
                 destLatLng = place.getLatLng();
-                // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getLatLng());
             }
             @Override
             public void onError(Status status) {
-                // TODO: Handle the error.
                 Log.i(TAG, "An error occurred: " + status);
             }
         });
-        selectDate=(EditText)findViewById(R.id.date_userHome);
-        selectTime=(EditText)findViewById(R.id.time_userHome);
-        spn_noOfSeats = findViewById(R.id.spn_noOfSeats_userHome);
-        btn_findRide = findViewById(R.id.btn_searchRide_userHome);
         selectDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 Calendar tempMaxDate = Calendar.getInstance();
                 tempMaxDate.add(Calendar.DAY_OF_MONTH,15);
                 date.getDatePicker().setMinDate(System.currentTimeMillis());
@@ -146,25 +156,32 @@ public class userHome extends AppCompatActivity {
         btn_findRide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InsertRideRequest();
+                String customerID = FirebaseAuth.getInstance().getUid();
+                Double sourceLat = sourceLatLng.latitude;
+                Double sourceLong = sourceLatLng.longitude;
+                Double destLat = destLatLng.latitude;
+                Double destLong = destLatLng.longitude;
+                String rideDate = selectDate.getText().toString();
+                String rideTime = selectTime.getText().toString();
+                Date date = new Date();
+                String curDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                String curTime = new SimpleDateFormat("hh:mm a").format(date);
+                int noOfSeats = Integer.parseInt(spn_noOfSeats.getSelectedItem().toString());
+                if(userType.equals("Customer")){
+                    reference = FirebaseDatabase.getInstance().getReference().child("CustomerRideRequest");
+                    reference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()) maxId = (dataSnapshot.getChildrenCount());
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) { }
+                    });
+                    CustomerRequest request = new CustomerRequest(customerID,sourceLat,sourceLong,destLat,destLong,rideDate,rideTime,curDate,curTime,"Requested",noOfSeats);
+                    reference.child(String.valueOf(maxId+1)).setValue(request);
+                }
+                else if(userType.equals("Driver")){ }
             }
         });
-    }
-
-    private void InsertRideRequest() {
-        int custID = sharedPreferences.getInt("userID",0);
-        Double sourceLat = sourceLatLng.latitude;
-        Double sourceLong = sourceLatLng.longitude;
-        Double destLat = destLatLng.latitude;
-        Double destLong = destLatLng.longitude;
-        String rideDate = selectDate.getText().toString();
-        String rideTime = selectTime.getText().toString();
-        Date date = new Date();
-        String curDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
-        String curTime = new SimpleDateFormat("hh:mm a").format(date);
-        int noOfSeats = Integer.parseInt(spn_noOfSeats.getSelectedItem().toString());
-        if(1 == databaseHandler.insertCustomerRequest(custID, sourceLat, sourceLong, destLat, destLong, rideDate, rideTime, curDate, curTime, noOfSeats)){
-            Toast.makeText(getApplicationContext(),"DONE",Toast.LENGTH_SHORT).show();
-        }
     }
 }

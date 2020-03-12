@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':mysql-connector-java-8.0.19'
 rootProject.name='CarPool'
