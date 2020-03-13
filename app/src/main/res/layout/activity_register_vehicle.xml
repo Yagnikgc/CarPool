@@ -100,7 +100,7 @@
                 android:id="@+id/spn_avaiableSeats_registerVehicle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:entries="@array/array_noOfSeasts" />
+                android:entries="@array/array_noOfSeats" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

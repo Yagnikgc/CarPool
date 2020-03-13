@@ -10,12 +10,13 @@
     <string name="lbl_from">From: </string>
     <string name="lbl_to">To: </string>
     <string name="find_ride">Search Ride</string>
+    <string name="post_ride">Post Ride</string>
     <string name="signOut">Sign Out</string>
     <string name="rateUs">Rate Us</string>
     <string name="yourTrips">Your Trips</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string-array name="array_noOfSeasts">
+    <string-array name="array_noOfSeats">
         <item>1</item>
         <item>2</item>
         <item>3</item>

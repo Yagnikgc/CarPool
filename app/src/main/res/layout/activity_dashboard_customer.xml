@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:id="@+id/drawer"
-    tools:context=".Dashboard"
+    tools:context=".Dashboard_Customer"
     tools:openDrawer="start">
 
     <FrameLayout
@@ -18,6 +18,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/nav_menu" />
+        app:menu="@menu/nav_menu_customer" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

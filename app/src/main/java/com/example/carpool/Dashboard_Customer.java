@@ -15,9 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    String userType;
+public class Dashboard_Customer extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout mDrawer;
     ActionBarDrawerToggle mToggle;
     NavigationView nav_View;
@@ -27,7 +25,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+        setContentView(R.layout.activity_dashboard_customer);
         InitializeUI();
     }
 
@@ -76,7 +74,6 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                 fragment = searchRide;
                 setTitle(menuItem.getTitle());
                 break;
-
         }
         fragmentManager.beginTransaction().replace(R.id.viewLayout, fragment).commit();
         mDrawer.closeDrawers();

@@ -125,7 +125,7 @@ public class activity_registerVehicle extends AppCompatActivity {
                             user.setVehicle(vehicle);
                             reference.child(userID).setValue(user);
                             Toast.makeText(getApplicationContext(),"Vehicle Registered successfully", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+                            Intent intent = new Intent(getApplicationContext(), Dashboard_Customer.class);
                             // to make sure user cant go back
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);

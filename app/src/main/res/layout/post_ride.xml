@@ -12,7 +12,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="20dp"
-            android:text="@string/find_ride"
+            android:text="@string/post_ride"
             android:textSize="28sp" />
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,7 +26,7 @@
                 android:textStyle="bold"
                 android:text="@string/lbl_from"/>
             <fragment
-                android:id="@+id/autocomplete_fragment_from_userHome"
+                android:id="@+id/autocomplete_fragment_from_postRide"
                 android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -43,7 +43,7 @@
                 android:textStyle="bold"
                 android:text="@string/lbl_to"/>
             <fragment
-                android:id="@+id/autocomplete_fragment_to_userHome"
+                android:id="@+id/autocomplete_fragment_to_postRide"
                 android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -60,12 +60,30 @@
                 android:textStyle="bold"
                 android:text="No of Seats: "/>
             <Spinner
-                android:id="@+id/spn_noOfSeats_userHome"
+                android:id="@+id/spn_noOfSeats_postRide"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/array_noOfSeats"
                 android:spinnerMode="dropdown" />
         </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="7dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Charges/Seat($): "/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_charges"
+            android:hint="00.00"
+            android:inputType="numberDecimal"/>
+    </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -78,7 +96,7 @@
                 android:textStyle="bold"
                 android:text="Date: "/>
             <EditText
-                android:id="@+id/date_userHome"
+                android:id="@+id/date_postRide"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="DD/MMM/YYYY"
@@ -97,7 +115,7 @@
                 android:textStyle="bold"
                 android:text="Time: "/>
             <EditText
-                android:id="@+id/time_userHome"
+                android:id="@+id/time_postRide"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="00:00 A"
@@ -108,8 +126,8 @@
             android:layout_width="135dp"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:id="@+id/btn_searchRide_userHome"
+            android:id="@+id/btn_searchRide_postRide"
             android:layout_marginBottom="15dp"
-            android:text="@string/find_ride" />
+            android:text="@string/post_ride" />
     </LinearLayout>
 </ScrollView>

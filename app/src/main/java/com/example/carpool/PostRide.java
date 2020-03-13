@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,11 +39,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class SearchRide extends Fragment {
-    private static final String TAG = "SearchRide";
-    private AutocompleteSupportFragment autocompleteFragment_from_userHome, autocompleteFragment_to_userHome;
+public class PostRide extends Fragment {
+    private static final String TAG = "PostRide";
+    private AutocompleteSupportFragment autocompleteFragment_from, autocompleteFragment_to;
     private String apiKey, userType;
-    private EditText selectDate,selectTime;
+    private EditText selectDate,selectTime,txt_charges;
     private Spinner spn_noOfSeats;
     private Button btn_findRide;
     private LatLng sourceLatLng, destLatLng;
@@ -53,29 +54,28 @@ public class SearchRide extends Fragment {
     private DatabaseReference reference;
     private long maxId = 0;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.search_ride, container, false);
+        return inflater.inflate(R.layout.post_ride, container, false);
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         InitializeUI();
         InitializeControls();
     }
-
     private void InitializeUI() {
         sharedPreferences = getActivity().getSharedPreferences("CarPool", Context.MODE_PRIVATE);
         userType = sharedPreferences.getString("UserType",null);
         apiKey = getString(R.string.API_KEY);
         // Initialize Fragments
-        autocompleteFragment_from_userHome = (AutocompleteSupportFragment)
-                getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment_from_userHome);
-        autocompleteFragment_to_userHome = (AutocompleteSupportFragment)
-                getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment_to_userHome);
-        selectDate = getView().findViewById(R.id.date_userHome);
-        selectTime = getView().findViewById(R.id.time_userHome);
-        spn_noOfSeats = getView().findViewById(R.id.spn_noOfSeats_userHome);
-        btn_findRide = getView().findViewById(R.id.btn_searchRide_userHome);
+        autocompleteFragment_from = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment_from_postRide);
+        autocompleteFragment_to = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment_to_postRide);
+        selectDate = getView().findViewById(R.id.date_postRide);
+        selectTime = getView().findViewById(R.id.time_postRide);
+        txt_charges = getView().findViewById(R.id.txt_charges);
+        spn_noOfSeats = getView().findViewById(R.id.spn_noOfSeats_postRide);
+        btn_findRide = getView().findViewById(R.id.btn_searchRide_postRide);
     }
-
     private void InitializeControls() {
         final DatePickerDialog date = new DatePickerDialog(getContext(),new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -112,10 +112,10 @@ public class SearchRide extends Fragment {
             Places.initialize(getContext(), apiKey);
         }
         // Specify the types of place data to return.
-        autocompleteFragment_from_userHome.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
-        autocompleteFragment_to_userHome.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+        autocompleteFragment_from.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+        autocompleteFragment_to.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
         // Set up a PlaceSelectionListener to handle the response.
-        autocompleteFragment_from_userHome.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+        autocompleteFragment_from.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
                 sourceLatLng = place.getLatLng();
@@ -126,7 +126,7 @@ public class SearchRide extends Fragment {
                 Log.i(TAG, "An error occurred: " + status);
             }
         });
-        autocompleteFragment_to_userHome.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+        autocompleteFragment_to.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
                 destLatLng = place.getLatLng();
@@ -163,11 +163,12 @@ public class SearchRide extends Fragment {
                 Double destLong = destLatLng.longitude;
                 String rideDate = selectDate.getText().toString();
                 String rideTime = selectTime.getText().toString();
+                Double charges = Double.valueOf(txt_charges.getText().toString());
                 Date date = new Date();
                 String curDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
                 String curTime = new SimpleDateFormat("hh:mm a").format(date);
                 int noOfSeats = Integer.parseInt(spn_noOfSeats.getSelectedItem().toString());
-                    reference = FirebaseDatabase.getInstance().getReference().child("CustomerRideRequest");
+                    reference = FirebaseDatabase.getInstance().getReference().child("DriverRideRequest");
                     reference.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -176,8 +177,9 @@ public class SearchRide extends Fragment {
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) { }
                     });
-                    CustomerRequest request = new CustomerRequest(customerID,sourceLat,sourceLong,destLat,destLong,rideDate,rideTime,curDate,curTime,"Requested",noOfSeats);
+                    DriverRequest request = new DriverRequest(customerID,sourceLat,sourceLong,destLat,destLong,rideDate,rideTime,curDate,curTime,"Posted",noOfSeats,charges);
                     reference.child(String.valueOf(maxId+1)).setValue(request);
+                Toast.makeText(getContext(),"Ride Posted Successfully",Toast.LENGTH_SHORT).show();
             }
         });
     }

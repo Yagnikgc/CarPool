@@ -120,14 +120,22 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("UserType",userType);
                 editor.apply();
-                if(!dataSnapshot.hasChild("vehicle") && userType.equals("Driver")){
-                    Intent i = new Intent(MainActivity.this,activity_registerVehicle.class);
+                if(userType.equals("Driver")){
+                    if(!dataSnapshot.hasChild("vehicle")) {
+                        Intent i = new Intent(MainActivity.this, activity_registerVehicle.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                    }else{
+                        Intent i = new Intent(MainActivity.this, Dashboard_Driver.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                    }
+                }else if(userType.equals("Customer")){
+                    Intent i = new Intent(MainActivity.this, Dashboard_Customer.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
-                }else{
-                    Intent i = new Intent(MainActivity.this,Dashboard.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
+                }else {
+                    Toast.makeText(getApplicationContext(),"An error occured!",Toast.LENGTH_SHORT).show();
                 }
             }
 
