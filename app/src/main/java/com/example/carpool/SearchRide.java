@@ -53,7 +53,7 @@ public class SearchRide extends Fragment {
     private DatabaseReference reference;
     private long maxId = 0;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.search_ride, container, false);
+        return inflater.inflate(R.layout.activity_search_ride, container, false);
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
