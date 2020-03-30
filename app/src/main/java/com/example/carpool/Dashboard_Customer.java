@@ -58,6 +58,7 @@ public class Dashboard_Customer extends AppCompatActivity implements NavigationV
                 setTitle(menuItem.getTitle());
                 break;
             case R.id.action_yourTrips:
+                fragment = new ShowRidesList_Customer();
                 setTitle(menuItem.getTitle());
                 break;
             case R.id.action_signOut:
