@@ -5,7 +5,9 @@ public class rideList_customer {
     private String driverName;
     private String availableSeats;
     private String pricePerSeat;
+    public rideList_customer(){
 
+    }
     public rideList_customer(String modelNumber, String driverName, String availableSeats, String pricePerSeat) {
         this.modelNumber = modelNumber;
         this.driverName = driverName;

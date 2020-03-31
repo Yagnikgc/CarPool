@@ -3,6 +3,7 @@ package com.example.carpool;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
@@ -40,18 +42,19 @@ import java.util.Locale;
 
 public class SearchRide extends Fragment {
     private static final String TAG = "SearchRide";
+    private final Calendar myCalendar = Calendar.getInstance();
     private AutocompleteSupportFragment autocompleteFragment_from_userHome, autocompleteFragment_to_userHome;
     private String apiKey, userType;
-    private EditText selectDate,selectTime;
+    private EditText selectDate, selectTime;
     private Spinner spn_noOfSeats;
     private Button btn_findRide;
     private LatLng sourceLatLng, destLatLng;
     private int mYear, mMonth, mDay, mHour, mMinute;
-    private final Calendar myCalendar = Calendar.getInstance();
     // Object to store currently logged in user
     private SharedPreferences sharedPreferences;
     private DatabaseReference reference;
     private long maxId = 0;
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_search_ride, container, false);
     }
@@ -63,7 +66,7 @@ public class SearchRide extends Fragment {
 
     private void InitializeUI() {
         sharedPreferences = getActivity().getSharedPreferences("CarPool", Context.MODE_PRIVATE);
-        userType = sharedPreferences.getString("UserType",null);
+        userType = sharedPreferences.getString("UserType", null);
         apiKey = getString(R.string.API_KEY);
         // Initialize Fragments
         autocompleteFragment_from_userHome = (AutocompleteSupportFragment)
@@ -77,7 +80,7 @@ public class SearchRide extends Fragment {
     }
 
     private void InitializeControls() {
-        final DatePickerDialog date = new DatePickerDialog(getContext(),new DatePickerDialog.OnDateSetListener() {
+        final DatePickerDialog date = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
@@ -91,7 +94,7 @@ public class SearchRide extends Fragment {
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.CANADA);
                 selectDate.setText(sdf.format(myCalendar.getTime()));
             }
-        },mYear,mMonth,mDay);
+        }, mYear, mMonth, mDay);
         final TimePickerDialog time = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -103,7 +106,7 @@ public class SearchRide extends Fragment {
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.CANADA);
                 selectTime.setText(sdf.format(myCalendar.getTime()));
             }
-        },mHour,mMinute, false);
+        }, mHour, mMinute, false);
         /**
          * Initialize Places. For simplicity, the API key is hard-coded. In a production
          * environment we recommend using a secure mechanism to manage API keys.
@@ -121,6 +124,7 @@ public class SearchRide extends Fragment {
                 sourceLatLng = place.getLatLng();
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getLatLng());
             }
+
             @Override
             public void onError(Status status) {
                 Log.i(TAG, "An error occurred: " + status);
@@ -132,6 +136,7 @@ public class SearchRide extends Fragment {
                 destLatLng = place.getLatLng();
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getLatLng());
             }
+
             @Override
             public void onError(Status status) {
                 Log.i(TAG, "An error occurred: " + status);
@@ -141,7 +146,7 @@ public class SearchRide extends Fragment {
             @Override
             public void onClick(View v) {
                 Calendar tempMaxDate = Calendar.getInstance();
-                tempMaxDate.add(Calendar.DAY_OF_MONTH,15);
+                tempMaxDate.add(Calendar.DAY_OF_MONTH, 15);
                 date.getDatePicker().setMinDate(System.currentTimeMillis());
                 date.getDatePicker().setMaxDate(tempMaxDate.getTimeInMillis());
                 date.show();
@@ -157,27 +162,43 @@ public class SearchRide extends Fragment {
             @Override
             public void onClick(View v) {
                 String customerID = FirebaseAuth.getInstance().getUid();
-                Double sourceLat = sourceLatLng.latitude;
-                Double sourceLong = sourceLatLng.longitude;
-                Double destLat = destLatLng.latitude;
-                Double destLong = destLatLng.longitude;
+                double sourceLat = sourceLatLng.latitude;
+                double sourceLong = sourceLatLng.longitude;
+                double destLat = destLatLng.latitude;
+                double destLong = destLatLng.longitude;
                 String rideDate = selectDate.getText().toString();
                 String rideTime = selectTime.getText().toString();
                 Date date = new Date();
                 String curDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
                 String curTime = new SimpleDateFormat("hh:mm a").format(date);
                 int noOfSeats = Integer.parseInt(spn_noOfSeats.getSelectedItem().toString());
-                    reference = FirebaseDatabase.getInstance().getReference().child("CustomerRideRequest");
-                    reference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists()) maxId = (dataSnapshot.getChildrenCount());
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) { }
-                    });
-                    CustomerRequest request = new CustomerRequest(customerID,sourceLat,sourceLong,destLat,destLong,rideDate,rideTime,curDate,curTime,"Requested",noOfSeats);
-                    reference.child(String.valueOf(maxId+1)).setValue(request);
+                reference = FirebaseDatabase.getInstance().getReference().child("CustomerRideRequest");
+                reference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) maxId = (dataSnapshot.getChildrenCount());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+                //CustomerRequest request = new CustomerRequest(customerID, sourceLat, sourceLong, destLat, destLong, rideDate, rideTime, curDate, curTime, "Requested", noOfSeats);
+                //reference.child(String.valueOf(maxId + 1)).setValue(request);
+                ShowRidesList_Customer list = new ShowRidesList_Customer();
+                Bundle bundle=new Bundle();
+                bundle.putDouble("sourceLat",sourceLat);
+                bundle.putDouble("sourceLong",sourceLong);
+                bundle.putDouble("destLat",destLat);
+                bundle.putDouble("destLong",destLong);
+                bundle.putString("rideDate",rideDate);
+                bundle.putString("rideTime",rideTime);
+                bundle.putInt("noOfSeats",noOfSeats);
+                list.setArguments(bundle);
+                FragmentTransaction transaction = getActivity()
+                        .getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.viewLayout, list);
+                transaction.commit();
             }
         });
     }
