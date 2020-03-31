@@ -22,22 +22,20 @@ import java.util.ArrayList;
 
 public class ShowRidesList_Customer extends Fragment {
 
-    private RecyclerView availableRides;
-    private rideList_customerAdapter adapter;
-    ArrayList<rideList_customer> ridesList;
-    DatabaseReference reference;
-    Double sourceLat, sourceLong, destLat, destLong;
+    private ArrayList<rideList_customer> ridesList;
+    private DatabaseReference reference;
+    private double sourceLat, sourceLong, destLat, destLong;
     String rideDate, rideTime;
     int noOfSeats;
-    String name="";
+    private String name = "", modelNumber = "";
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_rides_list_customer, container, false);
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        ridesList = new ArrayList<>();
         sourceLat = getArguments().getDouble("sourceLat");
         sourceLong = getArguments().getDouble("sourceLong");
         destLat = getArguments().getDouble("destLat");
@@ -45,7 +43,6 @@ public class ShowRidesList_Customer extends Fragment {
         rideDate = getArguments().getString("rideDate");
         rideTime = getArguments().getString("rideTime");
         noOfSeats = getArguments().getInt("noOfSeats");
-        ridesList = new ArrayList<>();
         getAvailableRides();
     }
 
@@ -63,13 +60,12 @@ public class ShowRidesList_Customer extends Fragment {
                         boolean destinationInRadius = distance(destLat, destLong, request.getDestinationLat(), request.getDestinationLong()) < 10.0;
                         //if (sourceInRadius && destinationInRadius) {
                         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("User").child(request.getDriverID());
-
                         ref.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 name = dataSnapshot.child("fname").getValue(String.class);
-                                Toast.makeText(getContext(),name,Toast.LENGTH_SHORT).show();
-
+                                modelNumber = dataSnapshot.child("vehicle").child("companyName").getValue(String.class) + " " + dataSnapshot.child("vehicle").child("modelNumber").getValue(String.class);
+                                Log.d("name",name + " " + modelNumber);
                             }
 
                             @Override
@@ -77,7 +73,8 @@ public class ShowRidesList_Customer extends Fragment {
 
                             }
                         });
-                        ridesList.add(new rideList_customer("1",name,String.valueOf(request.getNoOfSeatsRequired()),String.valueOf(request.getChargesPerSeat())));
+                        Log.d("name","name");
+                        ridesList.add(new rideList_customer(modelNumber, name, String.valueOf(request.getNoOfSeatsRequired()), String.valueOf(request.getChargesPerSeat())));
                         //}
                     }
                 }
@@ -95,10 +92,10 @@ public class ShowRidesList_Customer extends Fragment {
     }
 
     private void InitializeUI() {
-        availableRides = getView().findViewById(R.id.recycler_ridesList_customer);
+        RecyclerView availableRides = getView().findViewById(R.id.recycler_ridesList_customer);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         availableRides.setLayoutManager(mLayoutManager);
-        adapter = new rideList_customerAdapter(ridesList);
+        rideList_customerAdapter adapter = new rideList_customerAdapter(ridesList);
         availableRides.setAdapter(adapter);
     }
 
