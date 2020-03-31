@@ -29,6 +29,7 @@ public class ShowRidesList_Customer extends Fragment {
     Double sourceLat, sourceLong, destLat, destLong;
     String rideDate, rideTime;
     int noOfSeats;
+    String name="";
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,10 +63,11 @@ public class ShowRidesList_Customer extends Fragment {
                         boolean destinationInRadius = distance(destLat, destLong, request.getDestinationLat(), request.getDestinationLong()) < 10.0;
                         //if (sourceInRadius && destinationInRadius) {
                         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("User").child(request.getDriverID());
+
                         ref.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                String name = dataSnapshot.child("fname").getValue(String.class);
+                                name = dataSnapshot.child("fname").getValue(String.class);
                                 Toast.makeText(getContext(),name,Toast.LENGTH_SHORT).show();
 
                             }
