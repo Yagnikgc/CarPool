@@ -27,6 +27,7 @@ public class ShowRidesList_Customer extends Fragment {
     private double sourceLat, sourceLong, destLat, destLong;
     String rideDate, rideTime;
     int noOfSeats;
+    Boolean setflag=false;
     private String name = "", modelNumber = "";
     @Nullable
     @Override
@@ -43,6 +44,7 @@ public class ShowRidesList_Customer extends Fragment {
         rideDate = getArguments().getString("rideDate");
         rideTime = getArguments().getString("rideTime");
         noOfSeats = getArguments().getInt("noOfSeats");
+
         getAvailableRides();
     }
 
@@ -66,6 +68,8 @@ public class ShowRidesList_Customer extends Fragment {
                                 name = dataSnapshot.child("fname").getValue(String.class);
                                 modelNumber = dataSnapshot.child("vehicle").child("companyName").getValue(String.class) + " " + dataSnapshot.child("vehicle").child("modelNumber").getValue(String.class);
                                 Log.d("name",name + " " + modelNumber);
+                                setflag=true;
+                                setUI(request);
                             }
 
                             @Override
@@ -73,12 +77,10 @@ public class ShowRidesList_Customer extends Fragment {
 
                             }
                         });
-                        Log.d("name","name");
-                        ridesList.add(new rideList_customer(modelNumber, name, String.valueOf(request.getNoOfSeatsRequired()), String.valueOf(request.getChargesPerSeat())));
-                        //}
+
                     }
                 }
-                InitializeUI();
+
             }
 
             @Override
@@ -97,6 +99,16 @@ public class ShowRidesList_Customer extends Fragment {
         availableRides.setLayoutManager(mLayoutManager);
         rideList_customerAdapter adapter = new rideList_customerAdapter(ridesList);
         availableRides.setAdapter(adapter);
+    }
+
+    public void setUI(DriverRequest driverRequest)
+    {
+        if(setflag==true)
+        {
+            Log.d("name","name");
+            ridesList.add(new rideList_customer(modelNumber, name, String.valueOf(driverRequest.getNoOfSeatsRequired()), String.valueOf(driverRequest.getChargesPerSeat())));
+            InitializeUI();
+        }
     }
 
     private double distance(double lat1, double lon1, double lat2, double lon2) {
