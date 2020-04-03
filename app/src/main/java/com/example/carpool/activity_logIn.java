@@ -26,7 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class MainActivity extends AppCompatActivity {
+public class activity_logIn extends AppCompatActivity {
     private EditText emailTV, passwordTV;
     private Button loginBtn;
     private ProgressBar progressBar;
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         lbl_registerNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent_register = new Intent(getApplicationContext(), RegistrationActivity.class);
+                Intent intent_register = new Intent(getApplicationContext(), activity_registration.class);
                 startActivity(intent_register);
             }
         });
@@ -122,16 +122,16 @@ public class MainActivity extends AppCompatActivity {
                 editor.apply();
                 if(userType.equals("Driver")){
                     if(!dataSnapshot.hasChild("vehicle")) {
-                        Intent i = new Intent(MainActivity.this, activity_registerVehicle.class);
+                        Intent i = new Intent(activity_logIn.this, activity_registerVehicle.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(i);
                     }else{
-                        Intent i = new Intent(MainActivity.this, Dashboard_Driver.class);
+                        Intent i = new Intent(activity_logIn.this, activity_driverDashboard.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(i);
                     }
                 }else if(userType.equals("Customer")){
-                    Intent i = new Intent(MainActivity.this, Dashboard_Customer.class);
+                    Intent i = new Intent(activity_logIn.this, activity_customerDashboard.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
                 }else {

@@ -17,15 +17,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Dashboard_Driver"></activity>
+        <activity android:name=".activity_driverDashboard"></activity>
         <activity
             android:name=".activity_registerVehicle"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Dashboard_Customer" />
+        <activity android:name=".activity_customerDashboard" />
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".activity_registration"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity_logIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

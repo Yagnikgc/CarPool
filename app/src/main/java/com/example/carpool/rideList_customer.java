@@ -47,3 +47,4 @@ public class rideList_customer {
         this.pricePerSeat = pricePerSeat;
     }
 }
+

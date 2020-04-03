@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:id="@+id/drawerDriver"
-    tools:context=".Dashboard_Driver"
+    tools:context=".activity_driverDashboard"
     tools:openDrawer="start">
 
     <FrameLayout

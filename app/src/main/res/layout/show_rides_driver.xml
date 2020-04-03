@@ -10,27 +10,30 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:paddingTop="10dp">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/modelNumber_c"
-        android:layout_alignParentTop="true"/>
+        android:id="@+id/rideDate_d"
+        android:layout_alignParentTop="true" />
+
     <TextView
-        android:id="@+id/driverName_c"
+        android:id="@+id/chargesPerSeat_d"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/modelNumber_c" />
+        android:layout_below="@id/rideDate_d" />
+
     <TextView
-        android:id="@+id/availableSeats_c"
+        android:id="@+id/availableSeats_d"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chargesPerSeat_d" />
+
+    <ImageButton
+        android:id="@+id/directions_d"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true" />
-    <TextView
-        android:id="@+id/pricesPerSeat_c"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/availableSeats_c"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:src="@android:drawable/ic_menu_directions" />
 </RelativeLayout>
