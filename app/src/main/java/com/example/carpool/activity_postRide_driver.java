@@ -39,20 +39,19 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class PostRide extends Fragment {
+public class activity_postRide_driver extends Fragment {
     private static final String TAG = "PostRide";
     private AutocompleteSupportFragment autocompleteFragment_from, autocompleteFragment_to;
-    private String apiKey, userType;
-    private EditText selectDate,selectTime,txt_charges;
+    private String apiKey;
+    private EditText selectDate, selectTime, txt_charges;
     private Spinner spn_noOfSeats;
     private Button btn_findRide;
     private LatLng sourceLatLng, destLatLng;
     private int mYear, mMonth, mDay, mHour, mMinute;
     private final Calendar myCalendar = Calendar.getInstance();
-    // Object to store currently logged in user
-    private SharedPreferences sharedPreferences;
     private DatabaseReference reference;
     private long maxId = 0;
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_post_ride, container, false);
     }
@@ -61,9 +60,8 @@ public class PostRide extends Fragment {
         InitializeUI();
         InitializeControls();
     }
+
     private void InitializeUI() {
-        sharedPreferences = getActivity().getSharedPreferences("CarPool", Context.MODE_PRIVATE);
-        userType = sharedPreferences.getString("UserType",null);
         apiKey = getString(R.string.API_KEY);
         // Initialize Fragments
         autocompleteFragment_from = (AutocompleteSupportFragment)
@@ -76,8 +74,9 @@ public class PostRide extends Fragment {
         spn_noOfSeats = getView().findViewById(R.id.spn_noOfSeats_postRide);
         btn_findRide = getView().findViewById(R.id.btn_searchRide_postRide);
     }
+
     private void InitializeControls() {
-        final DatePickerDialog date = new DatePickerDialog(getContext(),new DatePickerDialog.OnDateSetListener() {
+        final DatePickerDialog date = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
@@ -91,7 +90,7 @@ public class PostRide extends Fragment {
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.CANADA);
                 selectDate.setText(sdf.format(myCalendar.getTime()));
             }
-        },mYear,mMonth,mDay);
+        }, mYear, mMonth, mDay);
         final TimePickerDialog time = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -103,7 +102,7 @@ public class PostRide extends Fragment {
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.CANADA);
                 selectTime.setText(sdf.format(myCalendar.getTime()));
             }
-        },mHour,mMinute, false);
+        }, mHour, mMinute, false);
         /**
          * Initialize Places. For simplicity, the API key is hard-coded. In a production
          * environment we recommend using a secure mechanism to manage API keys.
@@ -121,6 +120,7 @@ public class PostRide extends Fragment {
                 sourceLatLng = place.getLatLng();
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getLatLng());
             }
+
             @Override
             public void onError(Status status) {
                 Log.i(TAG, "An error occurred: " + status);
@@ -132,6 +132,7 @@ public class PostRide extends Fragment {
                 destLatLng = place.getLatLng();
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getLatLng());
             }
+
             @Override
             public void onError(Status status) {
                 Log.i(TAG, "An error occurred: " + status);
@@ -141,7 +142,7 @@ public class PostRide extends Fragment {
             @Override
             public void onClick(View v) {
                 Calendar tempMaxDate = Calendar.getInstance();
-                tempMaxDate.add(Calendar.DAY_OF_MONTH,15);
+                tempMaxDate.add(Calendar.DAY_OF_MONTH, 15);
                 date.getDatePicker().setMinDate(System.currentTimeMillis());
                 date.getDatePicker().setMaxDate(tempMaxDate.getTimeInMillis());
                 date.show();
@@ -168,19 +169,31 @@ public class PostRide extends Fragment {
                 String curDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
                 String curTime = new SimpleDateFormat("hh:mm a").format(date);
                 int noOfSeats = Integer.parseInt(spn_noOfSeats.getSelectedItem().toString());
-                    reference = FirebaseDatabase.getInstance().getReference().child("DriverRideRequest");
-                    reference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists()) maxId = (dataSnapshot.getChildrenCount());
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) { }
-                    });
-                    DriverRequest request = new DriverRequest(customerID,sourceLat,sourceLong,destLat,destLong,rideDate,rideTime,curDate,curTime,"Posted",noOfSeats,charges);
-                    reference.child(String.valueOf(maxId+1)).setValue(request);
-                Toast.makeText(getContext(),"Ride Posted Successfully",Toast.LENGTH_SHORT).show();
+                reference = FirebaseDatabase.getInstance().getReference().child("DriverRideRequest");
+                reference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) maxId = (dataSnapshot.getChildrenCount());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+                DriverRequest request = new DriverRequest(customerID, sourceLat, sourceLong, destLat, destLong, rideDate, rideTime, curDate, curTime, "Posted", noOfSeats, charges);
+                reference.child(String.valueOf(maxId + 1)).setValue(request);
+                Toast.makeText(getContext(), "Ride Posted Successfully\nWait until we find some customers for you.", Toast.LENGTH_LONG).show();
+                clearControls();
             }
         });
+    }
+
+    private void clearControls() {
+        autocompleteFragment_from.setText("");
+        autocompleteFragment_to.setText("");
+        selectDate.setText("");
+        selectTime.setText("");
+        txt_charges.setText("");
+        spn_noOfSeats.setSelection(0);
     }
 }

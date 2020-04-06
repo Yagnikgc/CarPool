@@ -3,7 +3,6 @@ package com.example.carpool;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,7 +39,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class SearchRide extends Fragment {
+public class activity_searchRide_customer extends Fragment {
     private static final String TAG = "SearchRide";
     private final Calendar myCalendar = Calendar.getInstance();
     private AutocompleteSupportFragment autocompleteFragment_from_userHome, autocompleteFragment_to_userHome;
@@ -183,9 +182,9 @@ public class SearchRide extends Fragment {
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                     }
                 });
-                //CustomerRequest request = new CustomerRequest(customerID, sourceLat, sourceLong, destLat, destLong, rideDate, rideTime, curDate, curTime, "Requested", noOfSeats);
-                //reference.child(String.valueOf(maxId + 1)).setValue(request);
-                ShowRidesList_Customer list = new ShowRidesList_Customer();
+                CustomerRequest request = new CustomerRequest(customerID, sourceLat, sourceLong, destLat, destLong, rideDate, rideTime, curDate, curTime, "Requested", noOfSeats);
+                reference.child(String.valueOf(maxId + 1)).setValue(request);
+                activity_showRidesList_Customer list = new activity_showRidesList_Customer();
                 Bundle bundle=new Bundle();
                 bundle.putDouble("sourceLat",sourceLat);
                 bundle.putDouble("sourceLong",sourceLong);

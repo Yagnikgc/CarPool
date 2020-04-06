@@ -21,7 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class RegistrationActivity extends AppCompatActivity {
+public class activity_registration extends AppCompatActivity {
     private ProgressBar progressBar;
     EditText txt_firstName, txt_lastName, txt_email, txt_contact, txt_password, txt_confPassword;
     RadioButton rdb_yes, rdb_no;
@@ -110,7 +110,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 else if(userType.equals("Driver")) user = new User(fName, lName, contact, email, userType, "Registered",null);
                                 reference.child(userID).setValue(user);
                                 progressBar.setVisibility(View.GONE);
-                                Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                                Intent intent = new Intent(activity_registration.this, activity_logIn.class);
                                 startActivity(intent);
                                 finish();
                             } else {

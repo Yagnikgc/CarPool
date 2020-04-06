@@ -15,13 +15,13 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Dashboard_Customer extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class activity_customerDashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout mDrawer;
     ActionBarDrawerToggle mToggle;
     NavigationView nav_View;
     FragmentManager fragmentManager;
     FrameLayout viewLayout;
-    SearchRide searchRide;
+    activity_searchRide_customer searchRide;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +39,7 @@ public class Dashboard_Customer extends AppCompatActivity implements NavigationV
         nav_View.setNavigationItemSelectedListener(this);
         viewLayout = (FrameLayout)findViewById(R.id.viewLayout);
         fragmentManager = getSupportFragmentManager();
-        searchRide = new SearchRide();
+        searchRide = new activity_searchRide_customer();
         fragmentManager.beginTransaction().replace(R.id.viewLayout, searchRide).commit();
     }
     @Override
@@ -58,12 +58,12 @@ public class Dashboard_Customer extends AppCompatActivity implements NavigationV
                 setTitle(menuItem.getTitle());
                 break;
             case R.id.action_yourTrips:
-                fragment = new ShowRidesList_Customer();
+                fragment = new activity_showRidesList_Customer();
                 setTitle(menuItem.getTitle());
                 break;
             case R.id.action_signOut:
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), activity_logIn.class);
                 // to make sure user cant go back
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

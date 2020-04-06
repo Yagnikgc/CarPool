@@ -12,7 +12,8 @@ import java.util.ArrayList;
 
 public class rideList_customerAdapter extends RecyclerView.Adapter<rideList_customerAdapter.MyViewHolder> {
     private ArrayList<rideList_customer> availableRequests;
-    public rideList_customerAdapter(ArrayList<rideList_customer> availableRequests){
+
+    public rideList_customerAdapter(ArrayList<rideList_customer> availableRequests) {
         this.availableRequests = availableRequests;
     }
 
@@ -21,10 +22,10 @@ public class rideList_customerAdapter extends RecyclerView.Adapter<rideList_cust
 
         public MyViewHolder(View view) {
             super(view);
-            modelNumber =  view.findViewById(R.id.modelNumber);
-            driverName =  view.findViewById(R.id.driverName);
-            availableSeats =  view.findViewById(R.id.availableSeats);
-            pricePerSeat = view.findViewById(R.id.pricesPerSeat);
+            modelNumber = view.findViewById(R.id.modelNumber_c);
+            driverName = view.findViewById(R.id.driverName_c);
+            availableSeats = view.findViewById(R.id.availableSeats_c);
+            pricePerSeat = view.findViewById(R.id.pricesPerSeat_c);
         }
     }
 
@@ -47,10 +48,10 @@ public class rideList_customerAdapter extends RecyclerView.Adapter<rideList_cust
 
     @Override
     public int getItemCount() {
-            if (availableRequests != null) {
-                return availableRequests.size();
-            } else {
-                return 0;
-            }
+        if (availableRequests != null) {
+            return availableRequests.size();
+        } else {
+            return 0;
+        }
     }
 }

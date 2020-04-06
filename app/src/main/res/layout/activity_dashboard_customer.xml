@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:id="@+id/drawer"
-    tools:context=".Dashboard_Customer"
+    tools:context=".activity_customerDashboard"
     tools:openDrawer="start">
 
     <FrameLayout
