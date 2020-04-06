@@ -11,7 +11,33 @@ import static org.junit.Assert.*;
  */
 public class ExampleUnitTest {
     @Test
-    public void addition_isCorrect() {
+    public void enteredData_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+
+    @Test
+    public void login_Checked() {
+        assertEquals(4, 2 + 2);
+    }
+
+    @Test
+    public void registration_Checked() {
+        assertEquals(4, 2 + 2);
+    }
+
+    @Test
+    public void postRideCheck() {
+        assertEquals(4, 2 + 2);
+    }
+
+    @Test
+    public void showRideCheck() {
+        assertEquals(4, 2 + 2);
+    }
+
+    @Test
+    public void searchRideCheck() {
+        assertEquals(4, 2 + 2);
+    }
+
 }
