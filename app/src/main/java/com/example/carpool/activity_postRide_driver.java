@@ -76,6 +76,17 @@ public class activity_postRide_driver extends Fragment {
     }
 
     private void InitializeControls() {
+        reference = FirebaseDatabase.getInstance().getReference().child("DriverRideRequest");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) maxId = (dataSnapshot.getChildrenCount());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
         final DatePickerDialog date = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -169,17 +180,6 @@ public class activity_postRide_driver extends Fragment {
                 String curDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
                 String curTime = new SimpleDateFormat("hh:mm a").format(date);
                 int noOfSeats = Integer.parseInt(spn_noOfSeats.getSelectedItem().toString());
-                reference = FirebaseDatabase.getInstance().getReference().child("DriverRideRequest");
-                reference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) maxId = (dataSnapshot.getChildrenCount());
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    }
-                });
                 DriverRequest request = new DriverRequest(customerID, sourceLat, sourceLong, destLat, destLong, rideDate, rideTime, curDate, curTime, "Posted", noOfSeats, charges);
                 reference.child(String.valueOf(maxId + 1)).setValue(request);
                 Toast.makeText(getContext(), "Ride Posted Successfully\nWait until we find some customers for you.", Toast.LENGTH_LONG).show();

@@ -43,16 +43,12 @@ public class activity_searchRide_customer extends Fragment {
     private static final String TAG = "SearchRide";
     private final Calendar myCalendar = Calendar.getInstance();
     private AutocompleteSupportFragment autocompleteFragment_from_userHome, autocompleteFragment_to_userHome;
-    private String apiKey, userType;
+    private String apiKey;
     private EditText selectDate, selectTime;
     private Spinner spn_noOfSeats;
     private Button btn_findRide;
     private LatLng sourceLatLng, destLatLng;
     private int mYear, mMonth, mDay, mHour, mMinute;
-    // Object to store currently logged in user
-    private SharedPreferences sharedPreferences;
-    private DatabaseReference reference;
-    private long maxId = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_search_ride, container, false);
@@ -64,8 +60,6 @@ public class activity_searchRide_customer extends Fragment {
     }
 
     private void InitializeUI() {
-        sharedPreferences = getActivity().getSharedPreferences("CarPool", Context.MODE_PRIVATE);
-        userType = sharedPreferences.getString("UserType", null);
         apiKey = getString(R.string.API_KEY);
         // Initialize Fragments
         autocompleteFragment_from_userHome = (AutocompleteSupportFragment)
@@ -160,30 +154,13 @@ public class activity_searchRide_customer extends Fragment {
         btn_findRide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String customerID = FirebaseAuth.getInstance().getUid();
                 double sourceLat = sourceLatLng.latitude;
                 double sourceLong = sourceLatLng.longitude;
                 double destLat = destLatLng.latitude;
                 double destLong = destLatLng.longitude;
                 String rideDate = selectDate.getText().toString();
                 String rideTime = selectTime.getText().toString();
-                Date date = new Date();
-                String curDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
-                String curTime = new SimpleDateFormat("hh:mm a").format(date);
                 int noOfSeats = Integer.parseInt(spn_noOfSeats.getSelectedItem().toString());
-                reference = FirebaseDatabase.getInstance().getReference().child("CustomerRideRequest");
-                reference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) maxId = (dataSnapshot.getChildrenCount());
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    }
-                });
-                CustomerRequest request = new CustomerRequest(customerID, sourceLat, sourceLong, destLat, destLong, rideDate, rideTime, curDate, curTime, "Requested", noOfSeats);
-                reference.child(String.valueOf(maxId + 1)).setValue(request);
                 activity_showRidesList_Customer list = new activity_showRidesList_Customer();
                 Bundle bundle=new Bundle();
                 bundle.putDouble("sourceLat",sourceLat);

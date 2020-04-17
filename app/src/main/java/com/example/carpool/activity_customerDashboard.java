@@ -58,7 +58,7 @@ public class activity_customerDashboard extends AppCompatActivity implements Nav
                 setTitle(menuItem.getTitle());
                 break;
             case R.id.action_yourTrips:
-                fragment = new activity_showRidesList_Customer();
+                fragment = new activity_showTripsList_customer();
                 setTitle(menuItem.getTitle());
                 break;
             case R.id.action_signOut:

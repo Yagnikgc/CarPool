@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,12 +28,11 @@ import java.util.ArrayList;
 public class activity_showRidesList_Customer extends Fragment {
 
     private ArrayList<rideList_customer> ridesList;
-    private DatabaseReference reference;
     private double sourceLat, sourceLong, destLat, destLong;
-    String rideDate, rideTime;
-    int noOfSeats;
-    Boolean setflag = false;
-    private String name = "", modelNumber = "";
+    private String rideDate, rideTime;
+    private int noOfSeats;
+    private boolean setFlag = false;
+    private String name = "", modelNumber = "", parentKey = "";
 
     @Nullable
     @Override
@@ -50,40 +50,41 @@ public class activity_showRidesList_Customer extends Fragment {
         rideDate = getArguments().getString("rideDate");
         rideTime = getArguments().getString("rideTime");
         noOfSeats = getArguments().getInt("noOfSeats");
-
         getAvailableRides();
     }
 
     private void getAvailableRides() {
-        reference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference.child("DriverRideRequest").orderByChild("rideRequestStatus").equalTo("Posted");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot :
+                for (final DataSnapshot snapshot :
                         dataSnapshot.getChildren()) {
                     final DriverRequest request = snapshot.getValue(DriverRequest.class);
                     if (request.getNoOfSeatsRequired() <= noOfSeats && request.getRideDate().equals(rideDate)) {
                         boolean sourceInRadius = distance(sourceLat, sourceLong, request.getSourceLat(), request.getSourceLong()) < 10.0;
                         boolean destinationInRadius = distance(destLat, destLong, request.getDestinationLat(), request.getDestinationLong()) < 10.0;
-                        //if (sourceInRadius && destinationInRadius) {
-                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("User").child(request.getDriverID());
-                        ref.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                name = dataSnapshot.child("fname").getValue(String.class);
-                                modelNumber = dataSnapshot.child("vehicle").child("companyName").getValue(String.class) + " " + dataSnapshot.child("vehicle").child("modelNumber").getValue(String.class);
-                                Log.d("name", name + " " + modelNumber);
-                                setflag = true;
-                                setUI(request);
-                            }
+                        if (sourceInRadius && destinationInRadius) {
+                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("User").child(request.getDriverID());
+                            ref.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    name = dataSnapshot.child("fname").getValue(String.class);
+                                    modelNumber = dataSnapshot.child("vehicle").child("companyName").getValue(String.class) + " " + dataSnapshot.child("vehicle").child("modelNumber").getValue(String.class);
+                                    String ref = snapshot.getRef().toString();
+                                    String[] tokens = ref.split("/");
+                                    parentKey = tokens[tokens.length - 1];
+                                    setFlag = true;
+                                    setUI(request);
+                                }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                            }
-                        });
-                        //}
+                                }
+                            });
+                        }
                     }
                 }
             }
@@ -106,16 +107,24 @@ public class activity_showRidesList_Customer extends Fragment {
         availableRides.addOnItemTouchListener(new RecyclerTouchListener(getContext(), availableRides, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
+                Toast.makeText(getContext(), parentKey, Toast.LENGTH_SHORT).show();
                 rideList_customer data = ridesList.get(position);
                 activity_showRideDetails_customer details = new activity_showRideDetails_customer();
                 Bundle bundle = new Bundle();
+                bundle.putString("parentKey", parentKey);
                 bundle.putString("modelNumber", data.getModelNumber());
                 bundle.putString("name", data.getDriverName());
-                bundle.putString("noOfSeats", data.getAvailableSeats());
+                bundle.putString("noOfSeatsAvailable", data.getAvailableSeats());
                 bundle.putString("chargesPerSeat", data.getPricePerSeat());
+                bundle.putDouble("sourceLat", sourceLat);
+                bundle.putDouble("sourceLong", sourceLong);
+                bundle.putDouble("destLat", destLat);
+                bundle.putDouble("destLong", destLong);
+                bundle.putString("rideDate", rideDate);
+                bundle.putString("rideTime", rideTime);
+                bundle.putInt("noOfSeatsRequired", noOfSeats);
                 details.setArguments(bundle);
-                FragmentTransaction transaction = getActivity()
-                        .getSupportFragmentManager().beginTransaction();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.viewLayout, details);
                 transaction.commit();
             }
@@ -127,9 +136,9 @@ public class activity_showRidesList_Customer extends Fragment {
         }));
     }
 
-    public void setUI(DriverRequest driverRequest) {
-        if (setflag == true) {
-            ridesList.add(new rideList_customer(modelNumber, name, String.valueOf(driverRequest.getNoOfSeatsRequired()), String.valueOf(driverRequest.getChargesPerSeat())));
+    private void setUI(DriverRequest driverRequest) {
+        if (setFlag == true) {
+            ridesList.add(new rideList_customer(parentKey, modelNumber, name, String.valueOf(driverRequest.getNoOfSeatsRequired()), String.valueOf(driverRequest.getChargesPerSeat())));
             InitializeUI();
         }
     }
@@ -143,16 +152,12 @@ public class activity_showRidesList_Customer extends Fragment {
         return (dist);
     }
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-    /*::  This function converts decimal degrees to radians            ::*/
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    // This function converts decimal degrees to radians
     private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-    /*::  This function converts radians to decimal degrees            ::*/
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    // This function converts radians to decimal degrees
     private double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
     }
