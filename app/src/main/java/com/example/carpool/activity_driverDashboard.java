@@ -70,6 +70,7 @@ public class activity_driverDashboard extends AppCompatActivity implements Navig
                 startActivity(intent);
                 break;
             case R.id.action_rateUs:
+                fragment = new activity_rateUs();
                 setTitle(menuItem.getTitle());
                 break;
             default:

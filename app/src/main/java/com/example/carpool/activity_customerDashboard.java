@@ -69,6 +69,7 @@ public class activity_customerDashboard extends AppCompatActivity implements Nav
                 startActivity(intent);
                 break;
             case R.id.action_rateUs:
+                fragment = new activity_rateUs();
                 setTitle(menuItem.getTitle());
                 break;
             default:
