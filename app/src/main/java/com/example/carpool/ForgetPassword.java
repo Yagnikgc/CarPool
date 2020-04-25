@@ -1,14 +1,14 @@
 package com.example.carpool;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,9 +26,9 @@ public class ForgetPassword extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
 
-        edtEmail = (EditText) findViewById(R.id.edt_reset_email);
-        btnResetPassword = (Button) findViewById(R.id.btn_reset_password);
-        btnBack = (Button) findViewById(R.id.btn_back);
+        edtEmail = findViewById(R.id.edt_reset_email);
+        btnResetPassword = findViewById(R.id.btn_reset_password);
+        btnBack = findViewById(R.id.btn_back);
 
         mAuth = FirebaseAuth.getInstance();
 

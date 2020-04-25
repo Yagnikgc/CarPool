@@ -30,14 +30,14 @@ public class activity_customerDashboard extends AppCompatActivity implements Nav
     }
 
     private void InitializeUI() {
-        mDrawer = (DrawerLayout)findViewById(R.id.drawer);
+        mDrawer = findViewById(R.id.drawer);
         mToggle = new ActionBarDrawerToggle(this,mDrawer, R.string.open, R.string.close);
         mDrawer.addDrawerListener(mToggle);
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        nav_View = (NavigationView)findViewById(R.id.nav_View);
+        nav_View = findViewById(R.id.nav_View);
         nav_View.setNavigationItemSelectedListener(this);
-        viewLayout = (FrameLayout)findViewById(R.id.viewLayout);
+        viewLayout = findViewById(R.id.viewLayout);
         fragmentManager = getSupportFragmentManager();
         searchRide = new activity_searchRide_customer();
         fragmentManager.beginTransaction().replace(R.id.viewLayout, searchRide).commit();

@@ -1,7 +1,6 @@
 package com.example.carpool;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +61,7 @@ public class activity_showRidesList_Customer extends Fragment {
                 for (final DataSnapshot snapshot :
                         dataSnapshot.getChildren()) {
                     final DriverRequest request = snapshot.getValue(DriverRequest.class);
-                    if (request.getNoOfSeatsRequired() <= noOfSeats && request.getRideDate().equals(rideDate)) {
+                    if (request.getNoOfSeatsRequired() >= noOfSeats && request.getRideDate().equals(rideDate)) {
                         boolean sourceInRadius = distance(sourceLat, sourceLong, request.getSourceLat(), request.getSourceLong()) < 10.0;
                         boolean destinationInRadius = distance(destLat, destLong, request.getDestinationLat(), request.getDestinationLong()) < 10.0;
                         if (sourceInRadius && destinationInRadius) {
